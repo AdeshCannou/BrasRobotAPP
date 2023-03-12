@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,12 +20,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,31 +43,22 @@ public class MainActivity extends AppCompatActivity {
 
     Button buttonSendMessage;
     Button buttonBTConnect;
-    Button buttonShare;
-    Button buttonMemory1;
-    Button buttonMemory2;
-    Button buttonMemory3;
-    Button buttonMemory4;
-    Button buttonMemory5;
-    Button buttonMemory6;
-    Button buttonMemory7;
-    Button buttonMemory8;
-    Button buttonMemory9;
-
-    Button buttonPopUpSave;
-    Button buttonPopUpCancel;
+    Button buttonRight;
+    Button buttonLeft;
+    Button buttonBack;
+    Button buttonForward;
+    ToggleButton buttonGrip;
 
 
-    TextView tvReceivedMessage;
+
 
     EditText editTextSentMessage;
-    EditText editTextPopUpLabel;
-    EditText editTextPopUpData;
+
 
     Spinner spinnerBTPairedDevices;
 
-    LinearLayout linearLayoutPopupSaveData;
-    PopupWindow popupWindowSaveData;
+
+
 
 
     static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
@@ -88,14 +82,7 @@ public class MainActivity extends AppCompatActivity {
     static final int BT_STATE_CONNECTION_FAILED    =4;
     static final int BT_STATE_MESSAGE_RECEIVED     =5;
 
-    String sM1Index="",sM1Data="";
-    String sM2Index="",sM2Data="";
-    String sM3Index="",sM3Data="";
-    String sM4Index="",sM4Data="";
-    String sM5Index="",sM5Data="";
-    String sM6Index="",sM6Data="";
-    String sM7Index="",sM7Data="";
-    String sM8Index="",sM8Data="";
+
 
 
     @Override
@@ -105,9 +92,6 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, "onCreate-Start");
 
-        tvReceivedMessage = findViewById(R.id.idMATextViewReceivedMessage);
-        tvReceivedMessage.setMovementMethod(new ScrollingMovementMethod());
-
 
         editTextSentMessage = findViewById(R.id.idMAEditTextSendMessage);
 
@@ -115,474 +99,79 @@ public class MainActivity extends AppCompatActivity {
 
         buttonSendMessage = findViewById(R.id.idMAButtonSendData);
         buttonBTConnect = findViewById(R.id.idMAButtonConnect);
-        buttonShare = findViewById(R.id.idMAButtonShare);
-        buttonMemory1 = findViewById(R.id.idMAButtonStoreData1);
-        buttonMemory2 = findViewById(R.id.idMAButtonStoreData2);
-        buttonMemory3 = findViewById(R.id.idMAButtonStoreData3);
-        buttonMemory4 = findViewById(R.id.idMAButtonStoreData4);
-        buttonMemory5 = findViewById(R.id.idMAButtonStoreData5);
-        buttonMemory6 = findViewById(R.id.idMAButtonStoreData6);
-        buttonMemory7 = findViewById(R.id.idMAButtonStoreData7);
-        buttonMemory8 = findViewById(R.id.idMAButtonStoreData8);
-        buttonMemory9 = findViewById(R.id.idMAButtonStoreData9);
+        buttonRight = findViewById(R.id.btn_droite);
+        buttonLeft = findViewById(R.id.btn_gauche);
+        buttonBack = findViewById(R.id.btn_bas);
+        buttonForward = findViewById(R.id.btn_haut);
+        buttonGrip = findViewById(R.id.tgl_on_off);
 
-        tvReceivedMessage.setText("App Loaded");
+
+        //tvReceivedMessage.setText("App Loaded");
 
         buttonSendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "Send Button clicked");
                 String sMessage = editTextSentMessage.getText().toString();
-                tvReceivedMessage.append("\n->"+sMessage);
-
-               sendMessage(sMessage);
-
-            }
-        });
-
-
-        buttonShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Button Click buttonShare");
-
-
-                Log.d(TAG, "sharing  : " + tvReceivedMessage.getText().toString());
-                Intent intentShare = new Intent(Intent.ACTION_SEND);
-                intentShare.setType("text/plain");
-                intentShare.putExtra(Intent.EXTRA_SUBJECT,"Share BTTerminal message");
-                intentShare.putExtra(Intent.EXTRA_TEXT,tvReceivedMessage.getText().toString());
-                startActivity(Intent.createChooser(intentShare, "Sharing BT Terminal"));
-
+                Log.d(TAG, "Message = " + sMessage);
+                sendMessage(sMessage);
 
             }
         });
-        buttonMemory1.setOnClickListener(new View.OnClickListener() {
+
+
+        buttonRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "Button Click buttonMemory1");
-                sendMessage(sM1Data);
-            }
-        });
-        buttonMemory1.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                Log.d(TAG, "Button Long Press buttonMemory1");
-                LayoutInflater layoutInflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View customView = layoutInflater.inflate(R.layout.layoutstoredata,null);
-                buttonPopUpCancel = customView.findViewById(R.id.idSDButtonCancel);
-                buttonPopUpSave = customView.findViewById(R.id.idSDButtonSave);
-                editTextPopUpLabel = customView.findViewById(R.id.idSDEditTextLabel);
-                editTextPopUpData = customView.findViewById(R.id.idSDEditTextData);
-                editTextPopUpData.setText(sM1Data);
-                editTextPopUpLabel.setText(sM1Index);
-                linearLayoutPopupSaveData = customView.findViewById(R.id.idLLPopupStoreData);
-                popupWindowSaveData = new PopupWindow(customView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                popupWindowSaveData.setFocusable(true);
-                popupWindowSaveData.update();
-                //display the popup window
-                popupWindowSaveData.showAtLocation(linearLayoutPopupSaveData, Gravity.CENTER, 0, 0);
-                buttonPopUpCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        popupWindowSaveData.dismiss();
-                    }
-                });
-                buttonPopUpSave.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        if(editTextPopUpData.getText().length()<1 || editTextPopUpLabel.getText().length()<1)
-                        {
-                            Toast.makeText(getApplicationContext(), "Please enter both label and Data", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        storeData("1",editTextPopUpLabel.getText().toString(),editTextPopUpData.getText().toString());
-                        popupWindowSaveData.dismiss();
-                        readAllData();
-                    }
-                });
-                return false;
+                sendMessage("D");
             }
         });
 
-        buttonMemory2.setOnClickListener(new View.OnClickListener() {
+        buttonLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Button Click buttonMemory2");
-                sendMessage(sM2Data);
-            }
-        });
-        buttonMemory2.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-
-                Log.d(TAG, "Button Long Press buttonMemory2");
-                LayoutInflater layoutInflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View customView = layoutInflater.inflate(R.layout.layoutstoredata,null);
-                buttonPopUpCancel = customView.findViewById(R.id.idSDButtonCancel);
-                buttonPopUpSave = customView.findViewById(R.id.idSDButtonSave);
-                editTextPopUpLabel = customView.findViewById(R.id.idSDEditTextLabel);
-                editTextPopUpData = customView.findViewById(R.id.idSDEditTextData);
-                editTextPopUpData.setText(sM2Data);
-                editTextPopUpLabel.setText(sM2Index);
-                linearLayoutPopupSaveData = customView.findViewById(R.id.idLLPopupStoreData);
-                popupWindowSaveData = new PopupWindow(customView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                popupWindowSaveData.setFocusable(true);
-                popupWindowSaveData.update();
-                //display the popup window
-                popupWindowSaveData.showAtLocation(linearLayoutPopupSaveData, Gravity.CENTER, 0, 0);
-                buttonPopUpCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        popupWindowSaveData.dismiss();
-                    }
-                });
-                buttonPopUpSave.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        if(editTextPopUpData.getText().length()<1 || editTextPopUpLabel.getText().length()<1)
-                        {
-                            Toast.makeText(getApplicationContext(), "Please enter both label and Data", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        storeData("2",editTextPopUpLabel.getText().toString(),editTextPopUpData.getText().toString());
-                        popupWindowSaveData.dismiss();
-                        readAllData();
-                    }
-                });
-
-                return false;
+                Log.d(TAG, "Button Click buttonMemory1");
+                sendMessage("G");
             }
         });
 
-
-
-
-        buttonMemory3.setOnClickListener(new View.OnClickListener() {
+        buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Button Click buttonMemory3");
-                sendMessage(sM3Data);
-            }
-        });
-        buttonMemory3.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-
-                Log.d(TAG, "Button Long Press buttonMemory2");
-                LayoutInflater layoutInflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View customView = layoutInflater.inflate(R.layout.layoutstoredata,null);
-                buttonPopUpCancel = customView.findViewById(R.id.idSDButtonCancel);
-                buttonPopUpSave = customView.findViewById(R.id.idSDButtonSave);
-                editTextPopUpLabel = customView.findViewById(R.id.idSDEditTextLabel);
-                editTextPopUpData = customView.findViewById(R.id.idSDEditTextData);
-                editTextPopUpData.setText(sM3Data);
-                editTextPopUpLabel.setText(sM3Index);
-                linearLayoutPopupSaveData = customView.findViewById(R.id.idLLPopupStoreData);
-                popupWindowSaveData = new PopupWindow(customView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                popupWindowSaveData.setFocusable(true);
-                popupWindowSaveData.update();
-                //display the popup window
-                popupWindowSaveData.showAtLocation(linearLayoutPopupSaveData, Gravity.CENTER, 0, 0);
-                buttonPopUpCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        popupWindowSaveData.dismiss();
-                    }
-                });
-                buttonPopUpSave.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        if(editTextPopUpData.getText().length()<1 || editTextPopUpLabel.getText().length()<1)
-                        {
-                            Toast.makeText(getApplicationContext(), "Please enter both label and Data", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        storeData("3",editTextPopUpLabel.getText().toString(),editTextPopUpData.getText().toString());
-                        popupWindowSaveData.dismiss();
-                        readAllData();
-                    }
-                });
-
-                return false;
+                Log.d(TAG, "Button Click buttonMemory1");
+                sendMessage("B");
             }
         });
 
-
-
-
-        buttonMemory4.setOnClickListener(new View.OnClickListener() {
+        buttonForward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Button Click buttonMemory4");
-                sendMessage(sM4Data);
+                Log.d(TAG, "Button Click buttonMemory1");
+                sendMessage("H");
             }
         });
-        buttonMemory4.setOnLongClickListener(new View.OnLongClickListener() {
+
+
+
+        buttonGrip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public boolean onLongClick(View view) {
-
-                Log.d(TAG, "Button Long Press buttonMemory4");
-                LayoutInflater layoutInflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View customView = layoutInflater.inflate(R.layout.layoutstoredata,null);
-                buttonPopUpCancel = customView.findViewById(R.id.idSDButtonCancel);
-                buttonPopUpSave = customView.findViewById(R.id.idSDButtonSave);
-                editTextPopUpLabel = customView.findViewById(R.id.idSDEditTextLabel);
-                editTextPopUpData = customView.findViewById(R.id.idSDEditTextData);
-                editTextPopUpData.setText(sM4Data);
-                editTextPopUpLabel.setText(sM4Index);
-                linearLayoutPopupSaveData = customView.findViewById(R.id.idLLPopupStoreData);
-                popupWindowSaveData = new PopupWindow(customView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                popupWindowSaveData.setFocusable(true);
-                popupWindowSaveData.update();
-                //display the popup window
-                popupWindowSaveData.showAtLocation(linearLayoutPopupSaveData, Gravity.CENTER, 0, 0);
-                buttonPopUpCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        popupWindowSaveData.dismiss();
-                    }
-                });
-                buttonPopUpSave.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        if(editTextPopUpData.getText().length()<1 || editTextPopUpLabel.getText().length()<1)
-                        {
-                            Toast.makeText(getApplicationContext(), "Please enter both label and Data", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        storeData("4",editTextPopUpLabel.getText().toString(),editTextPopUpData.getText().toString());
-                        popupWindowSaveData.dismiss();
-                        readAllData();
-                    }
-                });
-
-                return false;
-            }
-        });
-
-
-        buttonMemory5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Button Click buttonMemory5");
-                sendMessage(sM5Data);
-            }
-        });
-        buttonMemory5.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-
-                Log.d(TAG, "Button Long Press buttonMemory5");
-                LayoutInflater layoutInflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View customView = layoutInflater.inflate(R.layout.layoutstoredata,null);
-                buttonPopUpCancel = customView.findViewById(R.id.idSDButtonCancel);
-                buttonPopUpSave = customView.findViewById(R.id.idSDButtonSave);
-                editTextPopUpLabel = customView.findViewById(R.id.idSDEditTextLabel);
-                editTextPopUpData = customView.findViewById(R.id.idSDEditTextData);
-                editTextPopUpData.setText(sM5Data);
-                editTextPopUpLabel.setText(sM5Index);
-                linearLayoutPopupSaveData = customView.findViewById(R.id.idLLPopupStoreData);
-                popupWindowSaveData = new PopupWindow(customView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                popupWindowSaveData.setFocusable(true);
-                popupWindowSaveData.update();
-                //display the popup window
-                popupWindowSaveData.showAtLocation(linearLayoutPopupSaveData, Gravity.CENTER, 0, 0);
-                buttonPopUpCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        popupWindowSaveData.dismiss();
-                    }
-                });
-                buttonPopUpSave.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        if(editTextPopUpData.getText().length()<1 || editTextPopUpLabel.getText().length()<1)
-                        {
-                            Toast.makeText(getApplicationContext(), "Please enter both label and Data", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        storeData("5",editTextPopUpLabel.getText().toString(),editTextPopUpData.getText().toString());
-                        popupWindowSaveData.dismiss();
-                        readAllData();
-                    }
-                });
-
-                return false;
-            }
-        });
-
-
-        buttonMemory6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Button Click buttonMemory6");
-                sendMessage(sM6Data);
-            }
-        });
-        buttonMemory6.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-
-                Log.d(TAG, "Button Long Press buttonMemory6");
-                LayoutInflater layoutInflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View customView = layoutInflater.inflate(R.layout.layoutstoredata,null);
-                buttonPopUpCancel = customView.findViewById(R.id.idSDButtonCancel);
-                buttonPopUpSave = customView.findViewById(R.id.idSDButtonSave);
-                editTextPopUpLabel = customView.findViewById(R.id.idSDEditTextLabel);
-                editTextPopUpData = customView.findViewById(R.id.idSDEditTextData);
-                editTextPopUpData.setText(sM6Data);
-                editTextPopUpLabel.setText(sM6Index);
-                linearLayoutPopupSaveData = customView.findViewById(R.id.idLLPopupStoreData);
-                popupWindowSaveData = new PopupWindow(customView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                popupWindowSaveData.setFocusable(true);
-                popupWindowSaveData.update();
-                //display the popup window
-                popupWindowSaveData.showAtLocation(linearLayoutPopupSaveData, Gravity.CENTER, 0, 0);
-                buttonPopUpCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        popupWindowSaveData.dismiss();
-                    }
-                });
-                buttonPopUpSave.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        if(editTextPopUpData.getText().length()<1 || editTextPopUpLabel.getText().length()<1)
-                        {
-                            Toast.makeText(getApplicationContext(), "Please enter both label and Data", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        storeData("6",editTextPopUpLabel.getText().toString(),editTextPopUpData.getText().toString());
-                        popupWindowSaveData.dismiss();
-                        readAllData();
-                    }
-                });
-
-                return false;
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // Le code qui doit s'exécuter lorsque l'état du bouton change
+                if (isChecked) {
+                    // Le bouton est activé
+                    sendMessage("O");
+                } else {
+                    // Le bouton est désactivé
+                    sendMessage("F");
+                }
             }
         });
 
 
 
-        buttonMemory7.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Button Click buttonMemory7");
-                sendMessage(sM7Data);
-            }
-        });
-        buttonMemory7.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-
-                Log.d(TAG, "Button Long Press buttonMemory7");
-                LayoutInflater layoutInflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View customView = layoutInflater.inflate(R.layout.layoutstoredata,null);
-                buttonPopUpCancel = customView.findViewById(R.id.idSDButtonCancel);
-                buttonPopUpSave = customView.findViewById(R.id.idSDButtonSave);
-                editTextPopUpLabel = customView.findViewById(R.id.idSDEditTextLabel);
-                editTextPopUpData = customView.findViewById(R.id.idSDEditTextData);
-                editTextPopUpData.setText(sM7Data);
-                editTextPopUpLabel.setText(sM7Index);
-                linearLayoutPopupSaveData = customView.findViewById(R.id.idLLPopupStoreData);
-                popupWindowSaveData = new PopupWindow(customView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                popupWindowSaveData.setFocusable(true);
-                popupWindowSaveData.update();
-                //display the popup window
-                popupWindowSaveData.showAtLocation(linearLayoutPopupSaveData, Gravity.CENTER, 0, 0);
-                buttonPopUpCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        popupWindowSaveData.dismiss();
-                    }
-                });
-                buttonPopUpSave.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        if(editTextPopUpData.getText().length()<1 || editTextPopUpLabel.getText().length()<1)
-                        {
-                            Toast.makeText(getApplicationContext(), "Please enter both label and Data", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        storeData("7",editTextPopUpLabel.getText().toString(),editTextPopUpData.getText().toString());
-                        popupWindowSaveData.dismiss();
-                        readAllData();
-                    }
-                });
-
-                return false;
-            }
-        });
 
 
-        buttonMemory8.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Button Click buttonMemory8");
-                sendMessage(sM8Data);
-            }
-        });
-        buttonMemory8.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-
-                Log.d(TAG, "Button Long Press buttonMemory8");
-                LayoutInflater layoutInflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View customView = layoutInflater.inflate(R.layout.layoutstoredata,null);
-                buttonPopUpCancel = customView.findViewById(R.id.idSDButtonCancel);
-                buttonPopUpSave = customView.findViewById(R.id.idSDButtonSave);
-                editTextPopUpLabel = customView.findViewById(R.id.idSDEditTextLabel);
-                editTextPopUpData = customView.findViewById(R.id.idSDEditTextData);
-                editTextPopUpData.setText(sM8Data);
-                editTextPopUpLabel.setText(sM8Index);
-                linearLayoutPopupSaveData = customView.findViewById(R.id.idLLPopupStoreData);
-                popupWindowSaveData = new PopupWindow(customView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                popupWindowSaveData.setFocusable(true);
-                popupWindowSaveData.update();
-                //display the popup window
-                popupWindowSaveData.showAtLocation(linearLayoutPopupSaveData, Gravity.CENTER, 0, 0);
-                buttonPopUpCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        popupWindowSaveData.dismiss();
-                    }
-                });
-                buttonPopUpSave.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        if(editTextPopUpData.getText().length()<1 || editTextPopUpLabel.getText().length()<1)
-                        {
-                            Toast.makeText(getApplicationContext(), "Please enter both label and Data", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        storeData("8",editTextPopUpLabel.getText().toString(),editTextPopUpData.getText().toString());
-                        popupWindowSaveData.dismiss();
-                        readAllData();
-                    }
-                });
-
-                return false;
-            }
-        });
-
-
-
-        buttonMemory9.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Button Click Clear screen");
-                tvReceivedMessage.setText("");
-            }
-        });
 
 
         buttonBTConnect.setOnClickListener(new View.OnClickListener() {
@@ -607,23 +196,6 @@ public class MainActivity extends AppCompatActivity {
 
                             cBluetoothConnect cBTConnect = new cBluetoothConnect(BTDevice);
                             cBTConnect.start();
-
-//
-//                            try {
-//                                Log.d(TAG, "Creating socket, my uuid " + MY_UUID);
-//                                BTSocket = BTDevice.createRfcommSocketToServiceRecord(MY_UUID);
-//                                Log.d(TAG, "Connecting to device");
-//                                BTSocket.connect();
-//                                Log.d(TAG, "Connected");
-//                                buttonBTConnect.setText("Disconnect");
-//                                bBTConnected = true;
-//
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                                Log.e(TAG, "Exception = " + e.getMessage());
-//                                bBTConnected = false;
-//                            }
-
 
                         }
                     }
@@ -651,63 +223,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    void storeData(String sButtonNumber,String sIndex,String sValue)
-    {
-        Log.d(TAG, "storeData : " + sButtonNumber + ", Index : " + sIndex+ ", Value : " + sValue);
-        try {
-            SharedPreferences spSavedBluetoothDevice = getSharedPreferences("TERMINAL_STORED_DATA", this.MODE_PRIVATE);
-            SharedPreferences.Editor editor = spSavedBluetoothDevice.edit();
-            editor.putString("M"+sButtonNumber+"_INDEX",sIndex);
-            editor.putString("M"+sButtonNumber+"_DATA",sValue);
-            editor.commit();
-        }
-        catch (Exception exp)
-        {
-        }
-    }
 
-    void readAllData()
-    {
-        Log.d(TAG, "readAllData " );
-        try {
-            SharedPreferences spSavedBluetoothDevice = getSharedPreferences("TERMINAL_STORED_DATA", this.MODE_PRIVATE);
-            sM1Index = spSavedBluetoothDevice.getString("M1_INDEX", null);
-            if(sM1Index==null)
-            {
-                Log.d(TAG, "storing Default Data " );
-                storeData("1","S1","M1 Data");
-                storeData("2","S2","M2 Data");
-                storeData("3","S3","M3 Data");
-                storeData("4","S4","M4 Data");
-                storeData("5","S5","M5 Data");
-                storeData("6","S6","M6 Data");
-                storeData("7","S7","M7 Data");
-                storeData("8","S8","M8 Data");
-            }
-            sM1Index = spSavedBluetoothDevice.getString("M1_INDEX", null);sM1Data = spSavedBluetoothDevice.getString("M1_DATA", null);
-            sM2Index = spSavedBluetoothDevice.getString("M2_INDEX", null);sM2Data = spSavedBluetoothDevice.getString("M2_DATA", null);
-            sM3Index = spSavedBluetoothDevice.getString("M3_INDEX", null);sM3Data = spSavedBluetoothDevice.getString("M3_DATA", null);
-            sM4Index = spSavedBluetoothDevice.getString("M4_INDEX", null);sM4Data = spSavedBluetoothDevice.getString("M4_DATA", null);
-            sM5Index = spSavedBluetoothDevice.getString("M5_INDEX", null);sM5Data = spSavedBluetoothDevice.getString("M5_DATA", null);
-            sM6Index = spSavedBluetoothDevice.getString("M6_INDEX", null);sM6Data = spSavedBluetoothDevice.getString("M6_DATA", null);
-            sM7Index = spSavedBluetoothDevice.getString("M7_INDEX", null);sM7Data = spSavedBluetoothDevice.getString("M7_DATA", null);
-            sM8Index = spSavedBluetoothDevice.getString("M8_INDEX", null);sM8Data = spSavedBluetoothDevice.getString("M8_DATA", null);
 
-            buttonMemory1.setText(sM1Index);
-            buttonMemory2.setText(sM2Index);
-            buttonMemory3.setText(sM3Index);
-            buttonMemory4.setText(sM4Index);
-            buttonMemory5.setText(sM5Index);
-            buttonMemory6.setText(sM6Index);
-            buttonMemory7.setText(sM7Index);
-            buttonMemory8.setText(sM8Index);
-
-        }
-        catch (Exception exp)
-        {
-
-        }
-    }
 
 
 
@@ -854,7 +371,7 @@ public class MainActivity extends AppCompatActivity {
                     String tempMsg=new String(readBuff,0,msg.arg1);
                     Log.d(TAG, "Message receive ( " + tempMsg.length() + " )  data : " + tempMsg);
 
-                    tvReceivedMessage.append(tempMsg);
+                   // tvReceivedMessage.append(tempMsg);
 
 
                     break;
@@ -873,7 +390,7 @@ public class MainActivity extends AppCompatActivity {
             {
                 try {
                     cBTInitSendReceive.write(sMessage.getBytes());
-                    tvReceivedMessage.append("\r\n-> " + sMessage);
+                    //tvReceivedMessage.append("\r\n-> " + sMessage);
                 }
                 catch (Exception exp)
                 {
@@ -883,7 +400,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             Toast.makeText(getApplicationContext(), "Please connect to bluetooth", Toast.LENGTH_SHORT).show();
-            tvReceivedMessage.append("\r\n Not connected to bluetooth");
+            //tvReceivedMessage.append("\r\n Not connected to bluetooth");
         }
 
     }
@@ -939,7 +456,7 @@ public class MainActivity extends AppCompatActivity {
 
         getBTPairedDevices();
         populateSpinnerWithBTPairedDevices();
-        readAllData();
+        //readAllData();
 
 
     }
