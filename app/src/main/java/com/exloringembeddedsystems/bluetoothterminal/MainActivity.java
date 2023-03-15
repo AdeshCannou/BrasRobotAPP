@@ -2,6 +2,7 @@
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -47,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
     Button buttonLeft;
     Button buttonBack;
     Button buttonForward;
+
+    Button buttonUp;
+    Button buttonDown;
     ToggleButton buttonGrip;
 
 
@@ -85,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
         buttonLeft = findViewById(R.id.btn_gauche);
         buttonBack = findViewById(R.id.btn_bas);
         buttonForward = findViewById(R.id.btn_haut);
+        buttonUp = findViewById(R.id.btn_up);
+        buttonDown = findViewById(R.id.btn_down);
         buttonGrip = findViewById(R.id.tgl_on_off);
 
 
@@ -123,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         buttonRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Button Click buttonMemory1");
+                Log.d(TAG, "Button Click DROIT");
                 sendMessage("D");
             }
         });
@@ -131,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         buttonLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Button Click buttonMemory1");
+                Log.d(TAG, "Button Click GAUCHE");
                 sendMessage("G");
             }
         });
@@ -139,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Button Click buttonMemory1");
+                Log.d(TAG, "Button Click BAS");
                 sendMessage("B");
             }
         });
@@ -147,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         buttonForward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Button Click buttonMemory1");
+                Log.d(TAG, "Button Click Haut");
                 sendMessage("H");
             }
         });
@@ -165,6 +172,22 @@ public class MainActivity extends AppCompatActivity {
                     // Le bouton est désactivé
                     sendMessage("F");
                 }
+            }
+        });
+
+        buttonUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Button Click UP");
+                sendMessage("U");
+            }
+        });
+
+        buttonDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Button Click DOWN");
+                sendMessage("D");
             }
         });
 

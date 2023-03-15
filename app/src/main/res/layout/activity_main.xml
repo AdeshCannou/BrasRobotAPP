@@ -1,119 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="7"
+        android:layout_height="92dp"
+        android:background="@color/black"
         android:orientation="horizontal"
-        android:weightSum="1"
-        android:background="@color/black">
+        android:weightSum="1">
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".6">
+            android:layout_height="90dp"
+            android:layout_weight="0.6">
 
             <Spinner
                 android:id="@+id/idMASpinnerBTPairedDevices"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="92dp"
                 android:background="@color/white" />
 
         </LinearLayout>
 
-        <LinearLayout
+        <Button
+            android:id="@+id/idMAButtonConnect"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight=".4">
-
-            <Button
-                android:id="@+id/idMAButtonConnect"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Connect"
-                android:backgroundTint="@color/BT_BLUE" />
-
-        </LinearLayout>
+            android:layout_weight="0.4"
+            android:backgroundTint="@color/BT_BLUE"
+            android:text="Connect" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="73"
-        android:background="@color/black"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
-        </LinearLayout>
+            <!-- Contenu du layout gauche ici -->
 
-        <Button
-            android:id="@+id/btn_haut"
-            android:layout_width="wrap_content"
-            android:layout_height="76dp"
-            android:text="Haut" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:gravity="center">
+            <Button
+                android:id="@+id/btn_haut"
+                android:layout_width="76dp"
+                android:layout_height="91dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="20dp"
+                android:text="&#9650;"
+                android:textSize="50sp" />
 
             <Button
                 android:id="@+id/btn_gauche"
-                android:layout_width="wrap_content"
-                android:layout_height="76dp"
-                android:text="Gauche" />
+                android:layout_width="76dp"
+                android:layout_height="91dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="40dp"
+                android:text="&#9664;"
+                android:textSize="50sp"/>
 
             <ToggleButton
                 android:id="@+id/tgl_on_off"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textOn="On"
-                android:textOff="Off" />
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_centerVertical="false"
+                android:layout_marginEnd="9dp"
+                android:elevation="10dp"
+                android:textOff="Off"
+                android:textOn="On" />
 
             <Button
                 android:id="@+id/btn_droite"
-                android:layout_width="wrap_content"
-                android:layout_height="81dp"
-                android:text="Droite" />
+                android:layout_width="76dp"
+                android:layout_height="91dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="40dp"
+                android:text="&#9658;"
+                android:textSize="50sp"
+                />
 
-        </LinearLayout>
+            <Button
+                android:id="@+id/btn_bas"
+                android:layout_width="76dp"
+                android:layout_height="91dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:text="&#9660;"
+                android:textSize="50sp" />
 
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btn_up"
+                android:layout_width="76dp"
+                android:layout_height="91dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="20dp"
+                android:text="&#9650;"
+                android:textSize="50sp" />
+
+            <Button
+                android:id="@+id/btn_down"
+                android:layout_width="76dp"
+                android:layout_height="91dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:text="&#9660;"
+                android:textSize="50sp"
+                />
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black">
+
+        <!-- Contenu du layout en bas ici -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center_horizontal">
 
-            <Button
-                android:id="@+id/btn_bas"
-                android:layout_width="wrap_content"
-                android:layout_height="87dp"
-                android:text="Bas" />
 
         </LinearLayout>
 
         <EditText
             android:id="@+id/idMAEditTextSendMessage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="550dp"
+            android:layout_height="match_parent"
             android:background="@color/white"
             android:textColor="@color/black" />
 
@@ -125,13 +168,6 @@
             android:text="Send" />
 
     </LinearLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/black">
-
-    </RelativeLayout>
 
 
 </LinearLayout>
