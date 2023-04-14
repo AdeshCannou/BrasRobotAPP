@@ -18,6 +18,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -42,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "DEBUG_MA" ;
 
-    Button buttonSendMessage;
     Button buttonBTConnect;
     Button buttonRight;
     Button buttonLeft;
@@ -97,12 +97,8 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, "onCreate-Start");
 
-
-        editTextSentMessage = findViewById(R.id.idMAEditTextSendMessage);
-
         spinnerBTPairedDevices = findViewById(R.id.idMASpinnerBTPairedDevices);
 
-        buttonSendMessage = findViewById(R.id.idMAButtonSendData);
         buttonBTConnect = findViewById(R.id.idMAButtonConnect);
         buttonRight = findViewById(R.id.btn_droite);
         buttonLeft = findViewById(R.id.btn_gauche);
@@ -113,50 +109,109 @@ public class MainActivity extends AppCompatActivity {
         buttonGrip = findViewById(R.id.tgl_on_off);
 
 
-        //tvReceivedMessage.setText("App Loaded");
-
-        buttonSendMessage.setOnClickListener(new View.OnClickListener() {
+        buttonRight.setOnTouchListener(new View.OnTouchListener() {
+            private Handler mHandler;
             @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Send Button clicked");
-                String sMessage = editTextSentMessage.getText().toString();
-                Log.d(TAG, "Message = " + sMessage);
-                sendMessage(sMessage);
-
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (mHandler != null) return true;
+                        mHandler = new Handler();
+                        mHandler.postDelayed(mAction, 0);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (mHandler == null) return true;
+                        mHandler.removeCallbacks(mAction);
+                        mHandler = null;
+                        break;
+                }
+                return false;
             }
+            Runnable mAction = new Runnable() {
+                @Override public void run() {
+                    sendMessage("R");
+                    mHandler.postDelayed(this, 100);
+                }
+            };
+        });
+
+        buttonLeft.setOnTouchListener(new View.OnTouchListener() {
+            private Handler mHandler;
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (mHandler != null) return true;
+                        mHandler = new Handler();
+                        mHandler.postDelayed(mAction, 0);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (mHandler == null) return true;
+                        mHandler.removeCallbacks(mAction);
+                        mHandler = null;
+                        break;
+                }
+                return false;
+            }
+            Runnable mAction = new Runnable() {
+                @Override public void run() {
+                    sendMessage("L");
+                    mHandler.postDelayed(this, 100);
+                }
+            };
         });
 
 
-        buttonRight.setOnClickListener(new View.OnClickListener() {
+        buttonBack.setOnTouchListener(new View.OnTouchListener() {
+            private Handler mHandler;
             @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Button Click DROIT");
-                sendMessage("D");
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (mHandler != null) return true;
+                        mHandler = new Handler();
+                        mHandler.postDelayed(mAction, 0);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (mHandler == null) return true;
+                        mHandler.removeCallbacks(mAction);
+                        mHandler = null;
+                        break;
+                }
+                return false;
             }
+            Runnable mAction = new Runnable() {
+                @Override public void run() {
+                    sendMessage("B");
+                    mHandler.postDelayed(this, 100);
+                }
+            };
         });
 
-        buttonLeft.setOnClickListener(new View.OnClickListener() {
+        buttonForward.setOnTouchListener(new View.OnTouchListener() {
+            private Handler mHandler;
             @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Button Click GAUCHE");
-                sendMessage("G");
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (mHandler != null) return true;
+                        mHandler = new Handler();
+                        mHandler.postDelayed(mAction, 0);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (mHandler == null) return true;
+                        mHandler.removeCallbacks(mAction);
+                        mHandler = null;
+                        break;
+                }
+                return false;
             }
-        });
-
-        buttonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Button Click BAS");
-                sendMessage("B");
-            }
-        });
-
-        buttonForward.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Button Click Haut");
-                sendMessage("H");
-            }
+            Runnable mAction = new Runnable() {
+                @Override public void run() {
+                    sendMessage("F");
+                    mHandler.postDelayed(this, 100);
+                }
+            };
         });
 
 
@@ -167,28 +222,64 @@ public class MainActivity extends AppCompatActivity {
                 // Le code qui doit s'exécuter lorsque l'état du bouton change
                 if (isChecked) {
                     // Le bouton est activé
-                    sendMessage("O");
+                    sendMessage("M");
                 } else {
                     // Le bouton est désactivé
-                    sendMessage("F");
+                    sendMessage("W");
                 }
             }
         });
 
-        buttonUp.setOnClickListener(new View.OnClickListener() {
+        buttonUp.setOnTouchListener(new View.OnTouchListener() {
+            private Handler mHandler;
             @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Button Click UP");
-                sendMessage("U");
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (mHandler != null) return true;
+                        mHandler = new Handler();
+                        mHandler.postDelayed(mAction, 0);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (mHandler == null) return true;
+                        mHandler.removeCallbacks(mAction);
+                        mHandler = null;
+                        break;
+                }
+                return false;
             }
+            Runnable mAction = new Runnable() {
+                @Override public void run() {
+                    sendMessage("U");
+                    mHandler.postDelayed(this, 100);
+                }
+            };
         });
 
-        buttonDown.setOnClickListener(new View.OnClickListener() {
+        buttonDown.setOnTouchListener(new View.OnTouchListener() {
+            private Handler mHandler;
             @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Button Click DOWN");
-                sendMessage("D");
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (mHandler != null) return true;
+                        mHandler = new Handler();
+                        mHandler.postDelayed(mAction, 0);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (mHandler == null) return true;
+                        mHandler.removeCallbacks(mAction);
+                        mHandler = null;
+                        break;
+                }
+                return false;
             }
+            Runnable mAction = new Runnable() {
+                @Override public void run() {
+                    sendMessage("D");
+                    mHandler.postDelayed(this, 100);
+                }
+            };
         });
 
 
