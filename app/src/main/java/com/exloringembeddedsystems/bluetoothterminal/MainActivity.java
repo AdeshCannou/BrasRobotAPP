@@ -42,7 +42,6 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "DEBUG_MA" ;
-
     Button buttonBTConnect;
     Button buttonRight;
     Button buttonLeft;
@@ -53,17 +52,9 @@ public class MainActivity extends AppCompatActivity {
     Button buttonDown;
     ToggleButton buttonGrip;
 
-
-
-
     EditText editTextSentMessage;
 
-
     Spinner spinnerBTPairedDevices;
-
-
-
-
 
     static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     BluetoothSocket BTSocket = null;
@@ -86,9 +77,6 @@ public class MainActivity extends AppCompatActivity {
     static final int BT_STATE_CONNECTION_FAILED    =4;
     static final int BT_STATE_MESSAGE_RECEIVED     =5;
 
-
-
-
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,8 +95,6 @@ public class MainActivity extends AppCompatActivity {
         buttonUp = findViewById(R.id.btn_up);
         buttonDown = findViewById(R.id.btn_down);
         buttonGrip = findViewById(R.id.tgl_on_off);
-
-
         buttonRight.setOnTouchListener(new View.OnTouchListener() {
             private Handler mHandler;
             @Override
@@ -134,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
         });
-
         buttonLeft.setOnTouchListener(new View.OnTouchListener() {
             private Handler mHandler;
             @Override
@@ -160,8 +145,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
         });
-
-
         buttonBack.setOnTouchListener(new View.OnTouchListener() {
             private Handler mHandler;
             @Override
@@ -213,9 +196,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
         });
-
-
-
         buttonGrip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -282,12 +262,6 @@ public class MainActivity extends AppCompatActivity {
             };
         });
 
-
-
-
-
-
-
         buttonBTConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -327,20 +301,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                     buttonBTConnect.setText("Connect");
                     bBTConnected = false;
-
                 }
-
-
-
             }
         });
     }
-
-
-
-
-
-
 
     public class cBluetoothConnect extends Thread
     {
@@ -484,10 +448,6 @@ public class MainActivity extends AppCompatActivity {
                     byte[] readBuff= (byte[]) msg.obj;
                     String tempMsg=new String(readBuff,0,msg.arg1);
                     Log.d(TAG, "Message receive ( " + tempMsg.length() + " )  data : " + tempMsg);
-
-                   // tvReceivedMessage.append(tempMsg);
-
-
                     break;
 
             }
@@ -504,19 +464,15 @@ public class MainActivity extends AppCompatActivity {
             {
                 try {
                     cBTInitSendReceive.write(sMessage.getBytes());
-                    //tvReceivedMessage.append("\r\n-> " + sMessage);
                 }
                 catch (Exception exp)
                 {
-
                 }
             }
         }
         else {
             Toast.makeText(getApplicationContext(), "Please connect to bluetooth", Toast.LENGTH_SHORT).show();
-            //tvReceivedMessage.append("\r\n Not connected to bluetooth");
         }
-
     }
 
     void getBTPairedDevices()
