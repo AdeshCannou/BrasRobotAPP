@@ -6,7 +6,7 @@ Pour commencer
 
 Cette application Android permet de contrôler le robot Delta par Bluetooth. Elle permet d'envoyer des commandes pour faire bouger le robot dans différentes directions, ainsi que pour contrôler l'ouverture et la fermeture de la pince du robot.
 
-L'interface utilisateur est simple et intuitive. Elle est composée de boutons pour les différentes directions de mouvement et d'un bouton pour contrôler la pince. Les boutons de direction permettent de contrôler le mouvement dans la direction correspondante : vers le haut, vers le bas, vers la droite ou vers la gauche et monter / descendre
+L'interface utilisateur est simple et intuitive. Elle est composée de boutons pour les différentes directions de mouvement et d'un bouton pour contrôler l'electroaimant. Les boutons de direction permettent de contrôler le mouvement dans la direction correspondante : vers le haut, vers le bas, vers la droite ou vers la gauche et monter / descendre
 
 
 Pré-requis :
