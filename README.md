@@ -4,7 +4,7 @@ Ce projet est une application qui permet de contrôler un bras robotique Delta v
 
 Pour commencer
 
-Cette application Android permet de contrôler le robot Delta par Bluetooth. Elle permet d'envoyer des commandes pour faire bouger le robot dans différentes directions, ainsi que pour contrôler l'ouverture et la fermeture de la pince du robot.
+Cette application Android permet de contrôler le robot Delta par Bluetooth. Elle permet d'envoyer des commandes pour faire bouger le robot dans différentes directions, ainsi que pour contrôler l'activation et la désactivation de l'electroaimant afin d'attraper des objets.
 
 L'interface utilisateur est simple et intuitive. Elle est composée de boutons pour les différentes directions de mouvement et d'un bouton pour contrôler l'electroaimant. Les boutons de direction permettent de contrôler le mouvement dans la direction correspondante : vers le haut, vers le bas, vers la droite ou vers la gauche et monter / descendre
 
