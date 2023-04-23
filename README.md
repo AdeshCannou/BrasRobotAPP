@@ -19,6 +19,9 @@ Pré-requis :
 Installation de l'application via apk :
 	 
 	Ouvrir depuis votre appareil android le fichier app-release.apk dasn le dossier : 	AndroidApp\app\release\app-release.apk
+	Installer le fichier .apk
+    Avant d’ouvrir l’application DELTARM activer le bluetooth de l’appareil
+
 	
 Installation de l'application via android studio :
 
